@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
@@ -27,7 +28,7 @@ const DARK_BUTTON = "#4285f4";
 const DARK_BUTTON_HOVER = "#3367d6";
 const GOLD_ACCENT = "#ffc94b";
 
-export default function BookingForm() {
+export default function BookingForm({ onSearch }) {
   const [tab, setTab] = useState(0);
   const [pickup, setPickup] = useState(null);
   const [dropoff, setDropoff] = useState(null);
@@ -35,6 +36,7 @@ export default function BookingForm() {
   const [hour, setHour] = useState('');
   const [pickupDate, setPickupDate] = useState('');
   const [pickupTime, setPickupTime] = useState('');
+  const router = useRouter();
 
   const handleAddStop = () => {
     setStops([...stops, null]);
@@ -50,17 +52,8 @@ export default function BookingForm() {
 
   const handleSubmit = e => {
     e.preventDefault();
-    alert(
-      JSON.stringify({
-        type: tab === 0 ? 'point-to-point' : 'hourly',
-        pickup,
-        stops,
-        dropoff,
-        hour,
-        pickupDate,
-        pickupTime,
-      })
-    );
+    if (onSearch) onSearch();
+    // You can handle form submission here (e.g., send data to backend)
   };
 
   return (
@@ -125,7 +118,7 @@ export default function BookingForm() {
             value={pickup}
             onChange={(_, v) => setPickup(v)}
             placeholder="Address, Airport, Hotel, ..."
-            dark // pass custom prop to support dark mode in Autocomplete (see below)
+            dark
           />
         </Box>
 
